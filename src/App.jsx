@@ -1,35 +1,33 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { SearchBar } from './components/SearchBar'
+import { WeatherCard } from './components/WeatherCard'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [weatherData, setWeatherData] = useState(null);
+  
+  async function logJSONData() {
+    try{
+      const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+      const lat = 37.65835063513225;
+      const lon = 126.83203459217358;
+      const lang = "kr";
+
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${lang}&appid=${apiKey}`)
+        .then((res) => res.json())
+        .then(data => setWeatherData(data));
+    }catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <main>
+      <SearchBar />
+      <WeatherCard jsonData={weatherData} />
+      <button onClick={logJSONData}>fetch 버튼</button>
+    </main>
   )
 }
 
-export default App
+export default App;
