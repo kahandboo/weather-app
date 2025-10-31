@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import jsonData from '../mockData.json'
 import '../styles/WeatherCard.css'
 
-export function WeatherCard() {
+export function WeatherCard({ jsonData }) {
     function convertKelvinToCelsius(temp) {
         return Math.round(temp - 273.15);
     }
+
+    if (!jsonData) return <div>Loading...</div>;
 
     return(
         <div className='container-weathercard'>
