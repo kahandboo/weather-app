@@ -5,15 +5,15 @@ import './App.css'
 
 function App() {
   const [weatherData, setWeatherData] = useState(null);
-  
-  async function logJSONData() {
+  const [searchString, setsearchString] = useState("");
+
+  async function getJSONData() {
     try{
       const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
-      const lat = 37.65835063513225;
-      const lon = 126.83203459217358;
+      const q = searchString;
       const lang = "kr";
 
-      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=${lang}&appid=${apiKey}`)
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${q}&lang=${lang}&appid=${apiKey}`)
         .then((res) => res.json())
         .then(data => setWeatherData(data));
     }catch (err) {
@@ -23,9 +23,8 @@ function App() {
 
   return (
     <main>
-      <SearchBar />
+      <SearchBar string={searchString} setString={setsearchString} handleClick={getJSONData}/>
       <WeatherCard jsonData={weatherData} />
-      <button onClick={logJSONData}>fetch 버튼</button>
     </main>
   )
 }
